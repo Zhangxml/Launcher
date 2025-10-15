@@ -1,0 +1,118 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+}
+
+android {
+    namespace 'com.voyah.cockpit.launcher'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.voyah.cockpit.launcher"
+        minSdk 36
+        targetSdk 36
+        versionCode 1911111111
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        aosp_8295 {
+            keyAlias 'platform'
+            keyPassword 'android'
+            storeFile file("key/aosp.keystore")
+            storePassword 'android'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        aosp_16 {
+            keyAlias 'dev123'
+            keyPassword 'dev123'
+            storeFile file("key/platform.jks")
+            storePassword 'dev123'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.aosp_16
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.aosp_16
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    gradle.projectsEvaluated {
+        tasks.getByName("compileDebugJavaWithJavac") {
+            dependsOn("processDebugResources")
+            classpath = reorderClasspath(classpath.getFiles())
+        }
+        tasks.getByName("compileReleaseJavaWithJavac") {
+            dependsOn("processReleaseResources")
+            classpath = reorderClasspath(classpath.getFiles())
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        compose true
+    }
+}
+
+dependencies {
+
+    compileOnly fileTree(dir: 'compileonly', include: ['*.jar', '*.aar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.activity.compose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.ui
+    implementation libs.androidx.ui.graphics
+    implementation libs.androidx.ui.tooling.preview
+    implementation libs.androidx.material3
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.activity
+    implementation libs.androidx.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation platform(libs.androidx.compose.bom)
+    androidTestImplementation libs.androidx.ui.test.junit4
+    debugImplementation libs.androidx.ui.tooling
+    debugImplementation libs.androidx.ui.test.manifest
+}
+
+def reorderClasspath(Set<File> classpathSet) {
+    List<File> newFileList =  new ArrayList<>()
+    File sdkFile = null
+    for (File f : classpathSet) {
+        //将android.jar放到-classpath参数末尾即可
+        if ("android.jar" == f.getName()) {
+            sdkFile = f
+        } else {
+            newFileList.add(f);
+        }
+    }
+    if (sdkFile != null) {
+        newFileList.add(sdkFile)
+    }
+    return files(newFileList.toArray()
+    )
+}

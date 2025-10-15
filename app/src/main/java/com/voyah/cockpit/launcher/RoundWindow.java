@@ -1,0 +1,42 @@
+package com.voyah.cockpit.launcher;
+
+import android.content.Context;
+import android.graphics.PixelFormat;
+import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+public class RoundWindow{
+
+    private static RoundWindow mRoundWindow;
+    private static Context mContext;
+
+    public static RoundWindow get(Context context){
+        mRoundWindow = new RoundWindow();
+        mContext = context;
+        return mRoundWindow;
+    }
+
+    public RoundWindow addWindow() {
+        final WindowManager mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        final WindowManager.LayoutParams mWindowParams = new WindowManager.LayoutParams();
+        mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY; // 记得给权限
+        mWindowParams.format = PixelFormat.TRANSLUCENT;
+        mWindowParams.flags =
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE   // 事件是否支持透传
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH;
+        mWindowParams.setTitle("RoundWindow");
+        mWindowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        mWindowParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        mWindowParams.gravity = Gravity.CENTER;
+        mWindowManager.addView(new PaintView(mContext), mWindowParams);
+        return this;
+    }
+}
