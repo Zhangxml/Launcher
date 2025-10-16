@@ -23,10 +23,10 @@ public class PaintView extends View {
     private RectF rectF1,rectF2;
     private int measuredWidth;
     private int measuredHeight;
-    private int mLeft  = 1000;
+    private int mLeft  = 0;
     private float mStartX;
     private int mRound = 20;
-    private int mWidth = 10;
+    private int mWidth = 1;
 
     public PaintView(Context context) {
         this(context, null);
@@ -45,7 +45,7 @@ public class PaintView extends View {
         super.onAttachedToWindow();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setDither(true);
-        mPaint.setStrokeWidth(6);
+        mPaint.setStrokeWidth(1);
         mPaint.setColor(Color.BLACK);
     }
 

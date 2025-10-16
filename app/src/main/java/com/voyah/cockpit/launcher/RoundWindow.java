@@ -24,7 +24,7 @@ public class RoundWindow{
     public RoundWindow addWindow() {
         final WindowManager mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         final WindowManager.LayoutParams mWindowParams = new WindowManager.LayoutParams();
-        mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY; // 记得给权限
+        mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         mWindowParams.format = PixelFormat.TRANSLUCENT;
         mWindowParams.flags =
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
