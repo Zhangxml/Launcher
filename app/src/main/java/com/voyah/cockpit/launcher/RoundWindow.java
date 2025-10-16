@@ -24,7 +24,7 @@ public class RoundWindow{
     public RoundWindow addWindow() {
         final WindowManager mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         final WindowManager.LayoutParams mWindowParams = new WindowManager.LayoutParams();
-        mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        mWindowParams.type = 2024;
         mWindowParams.format = PixelFormat.TRANSLUCENT;
         mWindowParams.flags =
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -36,6 +36,9 @@ public class RoundWindow{
         mWindowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         mWindowParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         mWindowParams.gravity = Gravity.CENTER;
+        mWindowParams.setFitInsetsTypes(0);
+        mWindowParams.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
         mWindowManager.addView(new PaintView(mContext), mWindowParams);
         return this;
     }

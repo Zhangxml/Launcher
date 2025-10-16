@@ -25,7 +25,7 @@ public class PaintView extends View {
     private int measuredHeight;
     private int mLeft  = 0;
     private float mStartX;
-    private int mRound = 20;
+    private int mRound = 50;
     private int mWidth = 1;
 
     public PaintView(Context context) {
