@@ -17,8 +17,6 @@ public class LauncherVCOS extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher_vcos);
-
-
         RoundWindow.get(this).addWindow();
     }
 
