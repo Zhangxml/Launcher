@@ -49,7 +49,7 @@ import androidx.lifecycle.ViewModelProvider;
 /**
  * A car launcher view model to manage the lifecycle of {@link RemoteCarTaskView}.
  */
-public final class CarLauncherViewModel extends ViewModel implements DefaultLifecycleObserver {
+public final class CarLauncherViewModel2 extends ViewModel implements DefaultLifecycleObserver {
     private static final String TAG = "CarLauncherViewModel";
     private static final boolean DEBUG = true;
     private static final boolean sAutoRestartOnCrash = true;
@@ -64,7 +64,7 @@ public final class CarLauncherViewModel extends ViewModel implements DefaultLife
     private CarTaskViewControllerHostLifecycle mHostLifecycle;
     private MutableLiveData<RemoteCarTaskView> mRemoteCarTaskView;
 
-    public CarLauncherViewModel(@UiContext Context context, Intent mapsIntent) {
+    public CarLauncherViewModel2(@UiContext Context context, Intent mapsIntent) {
         mWindowContext = context.createWindowContext(TYPE_APPLICATION_STARTING, /* options */ null);
         mCar = Car.createCar(mWindowContext);
         mCarActivityManager = mCar.getCarManager(CarActivityManager.class);
@@ -250,7 +250,7 @@ public final class CarLauncherViewModel extends ViewModel implements DefaultLife
         @NonNull
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
-            return modelClass.cast(new CarLauncherViewModel(mContext, mMapsIntent));
+            return modelClass.cast(new CarLauncherViewModel2(mContext, mMapsIntent));
         }
     }
 }
