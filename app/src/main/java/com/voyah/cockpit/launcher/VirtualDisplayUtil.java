@@ -1,4 +1,4 @@
-package com.voyah.cockpit.launcher.mirror;
+package com.voyah.cockpit.launcher;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
@@ -42,6 +42,7 @@ public class VirtualDisplayUtil {
     }
 
     public VirtualDisplayUtil createVirtual(Context mContext, int width, int height){
+        if (mVirtualDisplay != null) return this;
         DisplayManager dm = (DisplayManager) mContext.getSystemService(Context.DISPLAY_SERVICE);
         Surface surface = getSurface(width,height);
         mVirtualDisplay = dm.createVirtualDisplay(
@@ -57,12 +58,13 @@ public class VirtualDisplayUtil {
         return this;
     }
 
-    public VirtualDisplay getVirtualDisplay() {
-        return mVirtualDisplay;
-    }
-
     public int getVirtualDisplayId(){
         return mVirtualDisplay.getDisplay().getDisplayId();
+    }
+
+    public void release(){
+        mVirtualDisplay.release();
+        mVirtualDisplay =null;
     }
 
     private int getDensityDpiByDisplayId(DisplayManager displayManager, int displayId) {
@@ -72,7 +74,7 @@ public class VirtualDisplayUtil {
         return displayMetrics.densityDpi;
     }
 
-    public void startActivity(Context mContext,String pkg,String clazz){
+    public int startActivity(Context mContext,String pkg,String clazz){
         ActivityOptions options = ActivityOptions.makeBasic();
         options.setLaunchDisplayId(mVirtualDisplay.getDisplay().getDisplayId());
         Intent intent = new Intent();
@@ -81,6 +83,7 @@ public class VirtualDisplayUtil {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         mContext.startActivity(intent,options.toBundle());
+        return 1;
     }
 
 }

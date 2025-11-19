@@ -8,11 +8,6 @@
     tools:context=".mirror.MirrorActivity">
 
 
-    <com.voyah.cockpit.launcher.mirror.MirrorView
-        android:id="@+id/surface_view"
-        android:layout_width="400dp"
-        android:layout_height="696dp"/>
-
     <FrameLayout
         android:layout_marginLeft="400dp"
         android:layout_width="match_parent"

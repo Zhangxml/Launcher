@@ -8,21 +8,16 @@ import android.content.ComponentName;
 import android.graphics.Region;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.voyah.cockpit.launcher.R;
-import com.voyah.cockpit.launcher.mirror.VirtualDisplayUtil;
+import com.voyah.cockpit.launcher.VirtualDisplayUtil;
 
 import java.lang.reflect.Method;
 
@@ -45,8 +40,6 @@ public class Mirror2Activity extends AppCompatActivity {
 
     }
 
-
-
     private void registerTaskStackListener(){
         try {
             ActivityTaskManager.getService().registerTaskStackListener(new TaskStackListener() {
@@ -58,7 +51,7 @@ public class Mirror2Activity extends AppCompatActivity {
                 @Override
                 public void onTaskMovedToFront(ActivityManager.RunningTaskInfo taskInfo) throws RemoteException {
                     super.onTaskMovedToFront(taskInfo);
-                    if (taskInfo.displayId != 0){
+                    if (taskInfo.displayId == VirtualDisplayUtil.getInstance().getVirtualDisplayId()){
                         try {
                             Method token = mMirroredSurfaceView.getClass().getMethod("getTokenForTaskId", int.class);
                             IBinder mIBinder = (IBinder) token.invoke(mMirroredSurfaceView,taskInfo.taskId);
