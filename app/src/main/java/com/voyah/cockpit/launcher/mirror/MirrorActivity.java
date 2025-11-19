@@ -45,7 +45,6 @@ public class MirrorActivity extends AppCompatActivity {
                 .createVirtual(this,400,696)
                 .startActivity(this,"com.zpd.menu","com.zpd.menu.MenusActivity");
 
-        App.saveId(VirtualDisplayUtil.getInstance().getVirtualDisplay().getDisplay().getDisplayId());
     }
 
     private SurfaceControl refectSurfaceControl(){
@@ -67,7 +66,7 @@ public class MirrorActivity extends AppCompatActivity {
     private void startMirror(){
         mSurfaceView.setObscuredTouchRegion();
         SurfaceControl surfaceControl = mSurfaceView.getSurfaceControl(); // parent
-        SurfaceControl mMirrorSurface = mirrorDisplay(App.mId);
+        SurfaceControl mMirrorSurface = mirrorDisplay(VirtualDisplayUtil.getInstance().getVirtualDisplayId());
         if (!mMirrorSurface.isValid()) {
             return;
         }
@@ -99,7 +98,7 @@ public class MirrorActivity extends AppCompatActivity {
 
 
 
-    private void re(){
+    private void registerTaskStackListener(){
         try {
             ActivityTaskManager.getService().registerTaskStackListener(new TaskStackListener() {
                 @Override

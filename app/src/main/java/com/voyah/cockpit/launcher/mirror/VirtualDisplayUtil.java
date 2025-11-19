@@ -61,6 +61,10 @@ public class VirtualDisplayUtil {
         return mVirtualDisplay;
     }
 
+    public int getVirtualDisplayId(){
+        return mVirtualDisplay.getDisplay().getDisplayId();
+    }
+
     private int getDensityDpiByDisplayId(DisplayManager displayManager, int displayId) {
         Display display = displayManager.getDisplay(displayId);
         DisplayMetrics displayMetrics = new DisplayMetrics();

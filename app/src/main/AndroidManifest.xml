@@ -74,15 +74,12 @@
     <uses-permission
         android:name="android.permission.ACCESS_NOTIFICATIONS"
         tools:ignore="ProtectedPermissions" />
-
     <uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
-    <uses-permission android:name="android.permission.MANAGE_APP_TOKENS" />
-
-    <!-- 这些权限普通应用无法获得 -->
+    <uses-permission android:name="android.permission.MANAGE_APP_TOKENS" /> <!-- 这些权限普通应用无法获得 -->
     <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
     <uses-permission android:name="android.permission.CAPTURE_SECURE_VIDEO_OUTPUT" />
     <uses-permission android:name="android.permission.ADD_TRUSTED_DISPLAY" />
-
+    <uses-permission android:name="android.car.permission.ACCESS_MIRRORED_SURFACE" />
 
     <application
         android:name=".App"
@@ -94,8 +91,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
-            android:name=".mirror.MirrorActivity"
+            android:name=".mirror2.Mirror2Activity"
             android:clearTaskOnLaunch="true"
             android:configChanges="uiMode|mcc|mnc"
             android:exported="true"
@@ -112,24 +110,7 @@
                 <category android:name="android.intent.category.LAUNCHER_APP" />
             </intent-filter>
         </activity>
-        <!--<activity
-            android:name=".LauncherVCOS"
-            android:clearTaskOnLaunch="true"
-            android:configChanges="uiMode|mcc|mnc"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:resumeWhilePausing="true"
-            android:stateNotNeeded="true"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter android:priority="1">
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER_APP" />
-            </intent-filter>
-        </activity>-->
     </application>
 
 </manifest>
