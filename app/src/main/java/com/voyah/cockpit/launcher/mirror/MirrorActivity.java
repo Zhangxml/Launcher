@@ -6,10 +6,10 @@ import android.app.TaskStackListener;
 import android.content.ComponentName;
 import android.gui.TrustedOverlay;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.SurfaceControl;
-import android.view.View;
 import android.view.WindowManagerGlobal;
 
 import androidx.activity.EdgeToEdge;
@@ -17,35 +17,49 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.voyah.cockpit.launcher.App;
 import com.voyah.cockpit.launcher.R;
-import com.voyah.cockpit.launcher.VirtualDisplayUtil;
+import com.voyah.cockpit.launcher.log.MLog;
+import com.voyah.cockpit.launcher.util.VirtualDisplayUtil;
+import com.voyah.cockpit.launcher.view.RoundWindow;
 
 public class MirrorActivity extends AppCompatActivity {
     public final String TAG = "MirrorActivity123";
     private boolean isAttached = false;
+
+    private ActivityManager.RunningTaskInfo mTaskInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_mirror);
+        RoundWindow.get(this).addWindow();
         registerTaskStackListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG, "onResume:");
+        MLog.e(TAG, "onResume:");
         if(isAttached){
-            getWindow().getDecorView().post(()->{
-                startMirror();
-            });
+            if (mTaskInfo != null){
+                if (mTaskInfo.displayId == VirtualDisplayUtil.getInstance().getVirtualDisplayId()){
+                    getWindow().getDecorView().post(()->{
+                        startMirror();
+                    });
+                }else {
+                    VirtualDisplayUtil.getInstance()
+                            .createVirtual(App.mContext, 400, 696)
+                            .startActivity(this, "com.zpd.menu", "com.zpd.menu.MenusActivity");
+                }
+            }
+
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(TAG, "onPause:");
+        MLog.e(TAG, "onPause:");
     }
 
     @Override
@@ -53,13 +67,10 @@ public class MirrorActivity extends AppCompatActivity {
         super.onAttachedToWindow();
         if (!isAttached){
             isAttached = true;
-            Log.e(TAG, "onAttachedToWindow:");
-            int i = VirtualDisplayUtil.getInstance()
+            MLog.e(TAG, "onAttachedToWindow:");
+            VirtualDisplayUtil.getInstance()
                     .createVirtual(App.mContext, 400, 696)
                     .startActivity(this, "com.zpd.menu", "com.zpd.menu.MenusActivity");
-            if (i == 0){
-                startMirror();
-            }
         }
     }
 
@@ -67,14 +78,13 @@ public class MirrorActivity extends AppCompatActivity {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         isAttached = false;
-        Log.e(TAG, "onDetachedFromWindow:");
+        MLog.e(TAG, "onDetachedFromWindow:");
     }
 
-    // 拿到对应display的SurfaceControl
     private SurfaceControl mirrorDisplay(final int displayId) {
         try {
             SurfaceControl outSurfaceControl = new SurfaceControl();
-            WindowManagerGlobal.getWindowManagerService().mirrorDisplay(displayId, outSurfaceControl);
+            WindowManagerGlobal.getWindowManagerService().mirrorDisplay(displayId, outSurfaceControl); // mirror对应display的SurfaceControl
             return outSurfaceControl;
         } catch (Exception e) {
             Log.e(TAG, "Unable to reach window manager", e);
@@ -83,7 +93,7 @@ public class MirrorActivity extends AppCompatActivity {
     }
 
     private void startMirror(){
-        Log.e(TAG, "startMirror:");
+        MLog.e(TAG, "startMirror:");
         SurfaceControl parent = getWindow().getDecorView().getViewRootImpl().getSurfaceControl();
         SurfaceControl mMirrorSurface = mirrorDisplay(VirtualDisplayUtil.getInstance().getVirtualDisplayId());
         if (!mMirrorSurface.isValid()) {
@@ -93,7 +103,8 @@ public class MirrorActivity extends AppCompatActivity {
         SurfaceControl.Transaction mTransaction = new SurfaceControl.Transaction();
         mTransaction.show(mMirrorSurface)
                 .setTrustedOverlay(parent, TrustedOverlay.DISABLED)
-                .setWindowCrop(mMirrorSurface, 400, 696)
+                .setWindowCrop(mMirrorSurface, 400, 696) // 这个很重要
+                .setCornerRadius(mMirrorSurface,10)
                 .setPosition(mMirrorSurface, 0, 0)
                 .reparent(mMirrorSurface, parent).apply();
     }
@@ -102,15 +113,26 @@ public class MirrorActivity extends AppCompatActivity {
         try {
             ActivityTaskManager.getService().registerTaskStackListener(new TaskStackListener() {
                 @Override
-                public void onTaskCreated(int taskId, ComponentName componentName) throws RemoteException {
-                    super.onTaskCreated(taskId, componentName);
+                public void onTaskDisplayChanged(int taskId, int newDisplayId) throws RemoteException {
+                    super.onTaskDisplayChanged(taskId, newDisplayId);
+                    if (mTaskInfo != null && mTaskInfo.taskId == taskId && newDisplayId == VirtualDisplayUtil.getInstance().getVirtualDisplayId()){
+                        MLog.e(TAG, "onTaskDisplayChanged: newDisplayId = " + newDisplayId);
+                        getWindow().getDecorView().postDelayed(()->{
+                            startMirror();
+                        },2000);
+                    }
                 }
 
                 @Override
                 public void onTaskMovedToFront(ActivityManager.RunningTaskInfo taskInfo) throws RemoteException {
                     super.onTaskMovedToFront(taskInfo);
                     if (taskInfo.displayId == VirtualDisplayUtil.getInstance().getVirtualDisplayId()){
+                        mTaskInfo = taskInfo; // 初始化
                         startMirror();
+                    }
+
+                    if (mTaskInfo != null && mTaskInfo.taskId == taskInfo.taskId){
+                        mTaskInfo = taskInfo;
                     }
                 }
             });

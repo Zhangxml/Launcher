@@ -1,4 +1,4 @@
-package com.voyah.cockpit.launcher;
+package com.voyah.cockpit.launcher.taskview;
 
 import static android.view.WindowManager.LayoutParams.PRIVATE_FLAG_TRUSTED_OVERLAY;
 
@@ -19,12 +19,11 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.window.WindowContainerTransaction;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.voyah.cockpit.launcher.R;
+import com.voyah.cockpit.launcher.view.RoundWindow;
 
 public class LauncherVCOS extends AppCompatActivity {
 

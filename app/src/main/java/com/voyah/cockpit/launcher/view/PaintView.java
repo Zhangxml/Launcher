@@ -1,4 +1,4 @@
-package com.voyah.cockpit.launcher;
+package com.voyah.cockpit.launcher.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,9 +9,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.hardware.display.DisplayManager;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.view.WindowInsets;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class PaintView extends View {
 
@@ -29,9 +26,9 @@ public class PaintView extends View {
     private RectF rectF1,rectF2;
     private int measuredWidth;
     private int measuredHeight;
-    private int mLeft  = 1408 - 400;
+    private int mLeft  = /*1408 - 400;*/ 0;
     private float mStartX;
-    private int mRound = 20;  // 圆角
+    private int mRound = 10;  // 圆角
     private int mWidth = 0;  // 4周边框
 
     private int midWidth = 5;

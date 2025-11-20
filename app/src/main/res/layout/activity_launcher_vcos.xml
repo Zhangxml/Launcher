@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="#F65959"
-    tools:context=".LauncherVCOS">
+    tools:context=".taskview.LauncherVCOS">
 
     <FrameLayout
         android:id="@+id/maps_card"

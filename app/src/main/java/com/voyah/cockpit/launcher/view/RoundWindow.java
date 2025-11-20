@@ -1,14 +1,9 @@
-package com.voyah.cockpit.launcher;
+package com.voyah.cockpit.launcher.view;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class RoundWindow{
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.voyah.cockpit.launcher;
+package com.voyah.cockpit.launcher.taskview;
 
 import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING;
 import static java.util.Objects.requireNonNull;

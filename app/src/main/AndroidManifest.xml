@@ -93,7 +93,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".mirror2.Mirror2Activity"
+            android:name=".mirror.MirrorActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="uiMode|mcc|mnc"
             android:exported="true"

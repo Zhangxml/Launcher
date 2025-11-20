@@ -1,4 +1,4 @@
-package com.voyah.cockpit.launcher;
+package com.voyah.cockpit.launcher.util;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
@@ -74,7 +74,7 @@ public class VirtualDisplayUtil {
         return displayMetrics.densityDpi;
     }
 
-    public int startActivity(Context mContext,String pkg,String clazz){
+    public void startActivity(Context mContext,String pkg,String clazz){
         ActivityOptions options = ActivityOptions.makeBasic();
         options.setLaunchDisplayId(mVirtualDisplay.getDisplay().getDisplayId());
         Intent intent = new Intent();
@@ -83,7 +83,17 @@ public class VirtualDisplayUtil {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         mContext.startActivity(intent,options.toBundle());
-        return 1;
+    }
+
+    public void startActivityWithDisplayId(Context mContext,String pkg,String clazz,int displayId){
+        ActivityOptions options = ActivityOptions.makeBasic();
+        options.setLaunchDisplayId(displayId);
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(pkg,clazz));
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        mContext.startActivity(intent,options.toBundle());
     }
 
 }

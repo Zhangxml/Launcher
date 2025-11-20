@@ -17,7 +17,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.voyah.cockpit.launcher.R;
-import com.voyah.cockpit.launcher.VirtualDisplayUtil;
+import com.voyah.cockpit.launcher.util.VirtualDisplayUtil;
 
 import java.lang.reflect.Method;
 
